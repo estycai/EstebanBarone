@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { KeyboardControls } from '@react-three/drei'
+import { ParkedCar } from './ParkedCar'
 import { Player } from './Player'
 import { keyboardMap } from './controls'
 import { Sun } from './Sun'
@@ -19,6 +20,7 @@ export function Experience() {
 
         <Suspense fallback={null}>
           <Player />
+          <ParkedCar />
         </Suspense>
       </Canvas>
     </KeyboardControls>

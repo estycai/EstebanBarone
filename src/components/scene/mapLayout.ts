@@ -9,6 +9,26 @@ export const ROAD_CORNER_RADIUS = 1
 export const SIDEWALK_WIDTH = 1.5
 export const CURB_HEIGHT = 0.15
 
+/** Axis-aligned box on the ground (XZ) that the player cannot walk into. */
+export type Obstacle = { x: number; z: number; halfX: number; halfZ: number }
+
+// VW Fox model: faces +X, ~2.92 long and ~1.71 wide.
+const CAR_HALF_LENGTH = 1.46
+const CAR_HALF_WIDTH = 0.86
+const CURB_GAP = 0.15
+
+// Right lane of the north-south road, nose pointing -Z (with traffic), against the +X curb.
+export const PARKED_CAR = {
+  x: ROAD_WIDTH / 2 - CAR_HALF_WIDTH - CURB_GAP,
+  z: 9,
+  yaw: Math.PI / 2,
+}
+
+// Rotated 90 degrees, so the car's length runs along Z.
+export const OBSTACLES: readonly Obstacle[] = [
+  { x: PARKED_CAR.x, z: PARKED_CAR.z, halfX: CAR_HALF_WIDTH, halfZ: CAR_HALF_LENGTH },
+]
+
 const ROAD_HALF_WIDTH = ROAD_WIDTH / 2
 const ROAD_HALF_LENGTH = ROAD_LENGTH / 2
 const SIDEWALK_HALF_WIDTH = ROAD_HALF_WIDTH + SIDEWALK_WIDTH

@@ -3,10 +3,13 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useAnimations, useGLTF, useKeyboardControls } from '@react-three/drei'
 import { Group, MathUtils, Mesh, Vector3 } from 'three'
 import type { Control } from './controls'
-import { getGroundHeight, MAP_CORNER_RADIUS, MAP_SIZE } from './mapLayout'
+import { resolveCollisions } from './collision'
+import { getGroundHeight, MAP_CORNER_RADIUS, MAP_SIZE, OBSTACLES } from './mapLayout'
 
 const MODEL_URL = '/models/yo.glb'
 const WALK_SPEED = 2.5
+// Footprint radius used against obstacles.
+const PLAYER_RADIUS = 0.3
 const TURN_SPEED = 10
 // How quickly the player settles onto a new ground height (curb steps).
 const STEP_SPEED = 20
@@ -144,6 +147,7 @@ export function Player() {
     if (isMoving) {
       direction.normalize().applyAxisAngle(UP, cameraYaw.current)
       player.position.addScaledVector(direction, WALK_SPEED * delta)
+      resolveCollisions(player.position, PLAYER_RADIUS, OBSTACLES)
       clampToMap(player.position)
 
       // The model faces +Z by default, so yaw = atan2(x, z).

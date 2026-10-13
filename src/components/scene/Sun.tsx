@@ -27,6 +27,9 @@ export function Sun() {
         intensity={2}
         castShadow
         shadow-mapSize={[2048, 2048]}
+        // Offsets that prevent self-shadowing stripes (shadow acne) on curved meshes.
+        shadow-bias={-0.0005}
+        shadow-normalBias={0.03}
         shadow-camera-left={-SHADOW_EXTENT}
         shadow-camera-right={SHADOW_EXTENT}
         shadow-camera-top={SHADOW_EXTENT}

@@ -3,10 +3,8 @@ import { Canvas } from '@react-three/fiber'
 import { KeyboardControls } from '@react-three/drei'
 import { Player } from './Player'
 import { keyboardMap } from './controls'
-import { MAP_SIZE, Surface } from './Surface'
-
-// Shadow frustum covers the whole map plus a small margin.
-const SHADOW_EXTENT = MAP_SIZE / 2 + 2
+import { Sun } from './Sun'
+import { Surface } from './Surface'
 
 export function Experience() {
   return (
@@ -15,16 +13,7 @@ export function Experience() {
         <color attach="background" args={['#87ceeb']} />
 
         <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[5, 10, 5]}
-          intensity={1.5}
-          castShadow
-          shadow-mapSize={[2048, 2048]}
-          shadow-camera-left={-SHADOW_EXTENT}
-          shadow-camera-right={SHADOW_EXTENT}
-          shadow-camera-top={SHADOW_EXTENT}
-          shadow-camera-bottom={-SHADOW_EXTENT}
-        />
+        <Sun />
 
         <Surface />
 

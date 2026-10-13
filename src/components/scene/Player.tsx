@@ -3,11 +3,13 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useAnimations, useGLTF, useKeyboardControls } from '@react-three/drei'
 import { Group, MathUtils, Mesh, Vector3 } from 'three'
 import type { Control } from './controls'
-import { MAP_CORNER_RADIUS, MAP_SIZE } from './Surface'
+import { getGroundHeight, MAP_CORNER_RADIUS, MAP_SIZE } from './mapLayout'
 
 const MODEL_URL = '/models/yo.glb'
 const WALK_SPEED = 2.5
 const TURN_SPEED = 10
+// How quickly the player settles onto a new ground height (curb steps).
+const STEP_SPEED = 20
 const CAMERA_FOLLOW_SPEED = 5
 const FADE_DURATION = 0.2
 const LOOK_AT_HEIGHT = 1.0
@@ -149,6 +151,10 @@ export function Player() {
       const step = 1 - Math.exp(-TURN_SPEED * delta)
       player.rotation.y += angleDelta(player.rotation.y, targetYaw) * step
     }
+
+    // Ease toward the ground height so curbs read as a quick step, not a pop.
+    const groundHeight = getGroundHeight(player.position.x, player.position.z)
+    player.position.y += (groundHeight - player.position.y) * (1 - Math.exp(-STEP_SPEED * delta))
 
     const nextAnimation: AnimationName = isMoving ? 'Walk' : 'Idle'
     if (nextAnimation !== currentAnimation.current) {
